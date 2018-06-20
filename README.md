@@ -16,8 +16,9 @@
 ![enter image description here](https://github.com/manojkmishra/graphql-typescript-server/blob/master/screenshots/dbcreate.PNG)   
 -yarn start and check if everything working fine  
 -npm install graphql-yoga --save  
--copy quickstart data from https://github.com/prismagraphql/graphql-yoga and paste in /src/index.ts  
+-copy quickstart data from graphql-yoga site and paste in /src/index.ts  
 -yarn start, server will start on localhost:4000  
 ![enter image description here](https://github.com/manojkmishra/graphql-typescript-server/blob/master/screenshots/runserver.PNG)  
+-npm install nodemon --save, add "start": "nodemon --exec ts-node src/index.ts" in script section of package.json.
 
 

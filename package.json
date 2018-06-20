@@ -11,11 +11,12 @@
   },
   "dependencies": {
     "graphql-yoga": "^1.14.8",
+    "nodemon": "^1.17.5",
     "pg": "^7.4.3",
     "reflect-metadata": "^0.1.12",
     "typeorm": "0.2.7"
   },
   "scripts": {
-    "start": "ts-node src/index.ts"
+    "start": "nodemon --exec ts-node src/index.ts"
   }
 }
