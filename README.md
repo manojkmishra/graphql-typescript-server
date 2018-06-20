@@ -11,11 +11,13 @@
 -typeorm init --name graphql-typescript-server --database postgres  
 -npm install -g npm-check-updates  
 -ncu -a  
--yarn install  
--modify ormconfig.json, create db  
-   "username": "postgres",  
-   "password": "postgres",  
-   "database": "graphql-typescript-server",  
+-npm install  
+-modify ormconfig.json for database un, pass, dbname, create db  
 ![enter image description here](https://github.com/manojkmishra/graphql-typescript-server/blob/master/screenshots/dbcreate.PNG)   
--yarn start    
+-yarn start and check if everything working fine  
+-npm install graphql-yoga --save  
+-copy quickstart data from https://github.com/prismagraphql/graphql-yoga and paste in /src/index.ts  
+-yarn start, server will start on localhost:4000  
+![enter image description here](https://github.com/manojkmishra/graphql-typescript-server/blob/master/screenshots/runserver.PNG)  
+
 
