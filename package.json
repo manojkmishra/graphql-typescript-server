@@ -24,6 +24,12 @@
   },
   "scripts": {
     "start": "nodemon --exec ts-node src/index.ts",
+    "test" : "jest",
     "gen-schema-types": "gql2ts src/schema.graphql -o src/types/schema.d.ts"
+  },
+  "jest": {
+    "transform": { "^.+\\.tsx?$": "ts-jest" },
+    "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.(jsx?|tsx?)$",
+    "moduleFileExtensions": ["ts", "tsx","js","jsx","json","node"]
   }
 }
