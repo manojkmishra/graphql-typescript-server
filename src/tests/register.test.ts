@@ -3,18 +3,26 @@
 // import {startServer} from "..";
 import { request } from "graphql-request";
 import { host } from "./constants";
-import { createConnection } from "typeorm";
+// import { createConnection } from "typeorm";
 import { User } from "../entity/User";
-import { createTypeormConn } from "../utils/createTypeormConn";
+// import { createTypeormConn } from "../utils/createTypeormConn";
+import { startServer } from "../startServer";
 
-beforeAll(async () => { await createTypeormConn(); });
+let getHost = () => "";
+beforeAll(async () => 
+{ // await createTypeormConn(); 
+ const app=await startServer();
+ const { port } = app.address();
+ getHost = () => `http://127.0.0.1:${port}`;
+});
 
 const email="bb@bb.com"; const password="bb"; 
 const mutation = `mutation {  register(email: "${email}", password: "${password}")  }`;
 test("Register user", async () =>
 { // await startServer();
  // await createTypeormConn();
-  const response = await request(host, mutation);
+  // const response = await request(host, mutation);
+  const response = await request(getHost(), mutation);
   expect(response).toEqual({ register: true });
   // await createConnection();
   const users = await User.find({ where: { email } });
