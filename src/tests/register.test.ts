@@ -3,11 +3,19 @@
 // import {startServer} from "..";
 import { request } from "graphql-request";
 import { host } from "./constants";
+import { createConnection } from "typeorm";
+import { User } from "../entity/User";
 
-const email="aa@aa.com"; const password="aa"; 
+const email="bb@bb.com"; const password="bb"; 
 const mutation = `mutation {  register(email: "${email}", password: "${password}")  }`;
 test("Register user", async () =>
 { // await startServer();
   const response = await request(host, mutation);
   expect(response).toEqual({ register: true });
+  await createConnection();
+  const users = await User.find({ where: { email } });
+  expect(users).toHaveLength(1); // it should be unique user
+  const user = users[0]; //  take first entry of the array
+  expect(user.email).toEqual(email);
+  expect(user.password).not.toEqual(password);  // password should be hashed so it will not be equal to user entered value
 });
