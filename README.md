@@ -19,6 +19,6 @@
 -copy quickstart data from graphql-yoga site and paste in /src/index.ts  
 -yarn start, server will start on localhost:4000  
 ![enter image description here](https://github.com/manojkmishra/graphql-typescript-server/blob/master/screenshots/runserver.PNG)  
--npm install nodemon --save, add "start": "nodemon --exec ts-node src/index.ts" in script section of package.json.
+-npm install nodemon --save, add "start": "nodemon --exec ts-node src/index.ts" in script section of package.json.  
 
 
