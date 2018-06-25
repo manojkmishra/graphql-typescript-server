@@ -18,7 +18,7 @@ beforeAll(async () =>
  getHost = () => `http://127.0.0.1:${port}`;
 });
 
-const email="bb@bb.com"; const password="bb"; 
+const email="bb"; const password="bb"; 
 const mutation = `mutation {  register(email: "${email}", password: "${password}") { path  message} }`;
 test("Register user", async () =>
 { // await startServer();

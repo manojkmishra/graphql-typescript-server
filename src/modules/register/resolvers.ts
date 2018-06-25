@@ -4,6 +4,7 @@ import { ResolverMap } from "../../types/graphql-utils";
 import { User } from "../../entity/User";
 // import {User} from './entity/User'; 
 import * as yup from "yup";
+import { formatYupError } from "../../utils/formatYupError";
 
 const schema = yup.object().shape({
   email: yup.string().min(3).max(255).email(),
@@ -19,7 +20,9 @@ export const resolvers: ResolverMap =
     register: async (_, args: GQL.IRegisterOnMutationArguments) => 
     { // error handling
       try {   await schema.validate(args, { abortEarly: false });    } 
-      catch (err) {  console.log('/modules/reg/resolvers-error=',err);   }
+      catch (err) {  // console.log('/modules/reg/resolvers-error=',err);   
+                     return formatYupError(err);
+                   }
       const { email, password } = args;
       const userAlreadyExists = await User.findOne({  where: { email }, select: ["id"] });
       if (userAlreadyExists) 
