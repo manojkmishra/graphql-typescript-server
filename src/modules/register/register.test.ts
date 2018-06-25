@@ -9,6 +9,7 @@ import { User } from "../../entity/User";
 // import { User } from "../entity/User";
 // import { createTypeormConn } from "../utils/createTypeormConn";
 // import { startServer } from "../startServer";
+import {  duplicateEmail,  emailNotLongEnough,  invalidEmail,  passwordNotLongEnough} from "./errorMessages";
 
 let getHost = () => "";
 beforeAll(async () => 
@@ -18,13 +19,16 @@ beforeAll(async () =>
  getHost = () => `http://127.0.0.1:${port}`;
 });
 
-const email="bb"; const password="bb"; 
-const mutation = `mutation {  register(email: "${email}", password: "${password}") { path  message} }`;
+const email="bbbb@bb.com"; const password="bb"; 
+// const mutation = 
+const mutation = (e: string, p: string) => `
+mutation {  register(email: "${e}", password: "${p}") { path  message} }`;
 test("Register user", async () =>
 { // await startServer();
  // await createTypeormConn();
   // const response = await request(host, mutation);
-  const response = await request(getHost(), mutation);
+  // --------------------error handling---to check if we can register a user-----------------------------------
+  const response = await request(getHost(), mutation(email, password));
   // expect(response).toEqual({ register: true }); // after error handling register:null
   expect(response).toEqual({ register: null });
   // await createConnection();
@@ -33,8 +37,28 @@ test("Register user", async () =>
   const user = users[0]; //  take first entry of the array
   expect(user.email).toEqual(email);
   expect(user.password).not.toEqual(password);  // password should be hashed so it will not be equal to user entered value
-  // ---------------in case error------------do below---------------
-  const response2: any = await request(getHost(), mutation);
+  // ---------------in case error-------duplicate email---------------
+  const response2: any = await request(getHost(), mutation(email, password));
   expect(response2.register).toHaveLength(1);  // in case error---register will return an array--
-  expect(response2.register[0].path).toEqual("email"); // first element of array will be email, second will be error
+ // expect(response2.register[0].path).toEqual("email"); // first element of array will be email, second will be error
+ expect(response2.register[0]).toEqual({  path: "email",  message: duplicateEmail});
+// -----------------------------------error handling---catch bad email
+const response3: any = await request(getHost(), mutation("b", password));
+expect(response3).toEqual(
+{  register: [ { path: "email", message: emailNotLongEnough },
+               { path: "email", message: invalidEmail  }
+             ]
+});
+// -----------------------------------------catch bad password
+const response4: any = await request(getHost(), mutation(email, "ad"));
+expect(response4).toEqual({  register: [{ path: "password", message: passwordNotLongEnough } ]});
+// -----------------------------------------catch bad password and bad email
+const response5: any = await request(getHost(), mutation("df", "ad"));
+expect(response5).toEqual(
+  {  register: [{ path: "email", message: emailNotLongEnough },
+                { path: "email", message: invalidEmail },
+                { path: "password", message: passwordNotLongEnough }
+               ]
+  });
+  
 });

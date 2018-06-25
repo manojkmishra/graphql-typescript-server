@@ -5,10 +5,13 @@ import { User } from "../../entity/User";
 // import {User} from './entity/User'; 
 import * as yup from "yup";
 import { formatYupError } from "../../utils/formatYupError";
+import {  duplicateEmail,  emailNotLongEnough,  invalidEmail,  passwordNotLongEnough} from "./errorMessages";
 
-const schema = yup.object().shape({
-  email: yup.string().min(3).max(255).email(),
-  password: yup.string().min(3).max(255)
+const schema = yup.object().shape(
+{  // email: yup.string().min(3).max(255).email(),
+   //  password: yup.string().min(3).max(255)
+   email: yup.string().min(3, emailNotLongEnough).max(255).email(invalidEmail),
+   password: yup.string().min(3, passwordNotLongEnough).max(255)
 });
 
 export const resolvers: ResolverMap = 
@@ -29,7 +32,10 @@ export const resolvers: ResolverMap =
       {   
        // throw Error("error here");
        // throw Error({"email already exist"});
-       return [{ path: "email",  message: "already taken" }]; // return array of errors from resovlers
+       return [{ path: "email", 
+                // message: "already taken" 
+                message: duplicateEmail
+                }]; // return array of errors from resovlers
       }
              
       const hashedPassowrd = await bcrypt.hash(password, 10); // this is async---but we are waiting(ie wait till its done--then move ahead)
