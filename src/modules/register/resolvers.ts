@@ -10,10 +10,20 @@ export const resolvers: ResolverMap =
   Query:{bye: ()=>"bye"},
   Mutation: 
   { register: async (_, { email, password }: GQL.IRegisterOnMutationArguments) => 
-    { const hashedPassowrd = await bcrypt.hash(password, 10); // this is async---but we are waiting(ie wait till its done--then move ahead)
+    { // error handling
+      const userAlreadyExists = await User.findOne({  where: { email }, select: ["id"] });
+      if (userAlreadyExists) 
+      {   
+       // throw Error("error here");
+       // throw Error({"email already exist"});
+       return [{ path: "email",  message: "already taken" }]; // return array of errors from resovlers
+      }
+             
+      const hashedPassowrd = await bcrypt.hash(password, 10); // this is async---but we are waiting(ie wait till its done--then move ahead)
       const user= User.create({email, password:hashedPassowrd }); // await added---so wait till its finished
       await user.save(); 
-      return true;
+    //  return true;
+      return null; // changed to this from true in error handling
      // return email + password;  
     }
   }
