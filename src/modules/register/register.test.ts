@@ -2,11 +2,13 @@
 // test('adds 1 + 2 to equal 3', () => {  expect(sum(1, 2)).toBe(3);});
 // import {startServer} from "..";
 import { request } from "graphql-request";
-import { host } from "./constants";
+import { startServer } from "../../startServer";
+import { User } from "../../entity/User";
+// import { host } from "./constants";
 // import { createConnection } from "typeorm";
-import { User } from "../entity/User";
+// import { User } from "../entity/User";
 // import { createTypeormConn } from "../utils/createTypeormConn";
-import { startServer } from "../startServer";
+// import { startServer } from "../startServer";
 
 let getHost = () => "";
 beforeAll(async () => 
