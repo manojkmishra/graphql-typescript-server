@@ -1,27 +1,30 @@
-import * as Redis from "ioredis";
 import fetch from "node-fetch";
-
 import { createConfirmEmailLink } from "./createConfirmEmailLink";
 import { createTypeormConn } from "./createTypeormConn";
 import { User } from "../entity/User";
+import { Connection } from "typeorm";
+import { redis } from "../redis";
 
 let userId = "";
-const redis = new Redis();
 
+
+let conn: Connection;
 beforeAll(async () => {
-  await createTypeormConn();
-  const user = await User.create({
-    email: "bob5@bob.com",
-    password: "jlkajoioiqwe"
-  }).save();
+  conn = await createTypeormConn();
+  const user = await User.create({    email: "bob5@bob.com",    password: "jlkajoioiqwe"  }).save();
   userId = user.id;
 });
 
-describe("test createConfirmEmailLink", () => {
-  test("Make sure it confirms user and clears key in redis", async () => {
+afterAll(async () => {
+  conn.close();
+});
+
+
+  test("Make sure it confirms user and clears key in redis", async () => 
+  {
     
-    // console.log('/email--1st test-process.env.TEST_HOST', process.env.TEST_HOST);
-    // console.log('/email--1st test-userId', userId);
+   // console.log('/email--1st test-process.env.TEST_HOST', process.env.TEST_HOST);
+   // console.log('/email--1st test-userId', userId);
    // console.log('/email--1st test-redis', redis);
     const url = await createConfirmEmailLink( process.env.TEST_HOST as string,userId, redis );
 
@@ -37,9 +40,5 @@ describe("test createConfirmEmailLink", () => {
     expect(value).toBeNull();
   });
 
-  test("sends invalid back if bad id sent", async () => {
-    const response = await fetch(`${process.env.TEST_HOST}/confirm/12083`);
-    const text = await response.text();
-    expect(text).toEqual("invalid");
-  });
-});
+
+
