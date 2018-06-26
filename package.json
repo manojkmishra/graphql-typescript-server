@@ -44,7 +44,7 @@
     "test-server": "cross-env NODE_ENV=test ts-node src/index.ts",
     "test": "cross-env NODE_ENV=test jest --watch",
     "ci": "start-server-and-test test-server http://localhost:4000 test",
-    "gen-schema-types": "gql2ts src/schema.graphql -o src/types/schema.d.ts"
+    "gen-schema-types": "ts-node src/scripts/createTypes.ts"
   },
   "jest": {
     "globalSetup": "./src/testSetup/callSetup.js",
