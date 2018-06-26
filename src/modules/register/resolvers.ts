@@ -33,8 +33,8 @@ export const resolvers: ResolverMap =
       const user= User.create({email, password:hashedPassowrd }); // await added---so wait till its finished
       await user.save(); 
       // tslint:disable-next-line
-      const link = await createConfirmEmailLink(url, user.id, redis);
-      console.log('register-resolver-LInk=',link);
+       await createConfirmEmailLink(url, user.id, redis);
+     // console.log('register-resolver-LInk=',link);
       return null; // changed to this from true in error handling
     }
   }
