@@ -3,12 +3,8 @@ import {Entity, Column, BaseEntity, PrimaryGeneratedColumn} from "typeorm";
 
 @Entity("users")
 export class User extends BaseEntity
-{  // @PrimaryGeneratedColumn()
-   // @PrimaryColumn("uuid")  id: string;
-    @PrimaryGeneratedColumn("uuid") id: string;
+{   @PrimaryGeneratedColumn("uuid") id: string;
     @Column("varchar", { length: 255 })   email: string;
     @Column("text") password: string;  
-    
-   // @BeforeInsert()
-  //  addId(){ this.id = uuidv4()}
+    @Column("boolean", { default: false })  confirmed: boolean;
 }

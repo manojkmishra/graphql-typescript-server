@@ -19,6 +19,7 @@
     "yup": "^0.25.1"
   },
   "dependencies": {
+    "@types/ioredis": "^3.2.9",
     "bcryptjs": "^2.4.3",
     "cross-env": "^5.2.0",
     "graphql": "^0.13.2",
@@ -26,6 +27,7 @@
     "graphql-request": "^1.6.0",
     "graphql-tools": "^3.0.2",
     "graphql-yoga": "^1.14.8",
+    "ioredis": "^3.2.2",
     "nodemon": "^1.17.5",
     "pg": "^7.4.3",
     "reflect-metadata": "^0.1.12",
