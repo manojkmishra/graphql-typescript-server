@@ -8,7 +8,7 @@ import { formatYupError } from "../../utils/formatYupError";
 import {  duplicateEmail,  emailNotLongEnough,  invalidEmail,  passwordNotLongEnough} from "./errorMessages";
 //import { createConfirmEmailLink } from "../../utils/createConfirmEmailLink";
 //import { sendEmail } from "../../utils/sendEmail";
-//import { v4 } from "uuid";
+import { v4 } from "uuid";
 
 const schema = yup.object().shape(
 {  email: yup.string().min(3, emailNotLongEnough).max(255).email(invalidEmail),
@@ -32,7 +32,7 @@ export const resolvers: ResolverMap =
       }
              
       const hashedPassowrd = await bcrypt.hash(password, 10); // this is async---but we are waiting(ie wait till its done--then move ahead)
-      const user= User.create({ email, password:hashedPassowrd }); // await added---so wait till its finished
+      const user= User.create({ id: v4(),email, password:hashedPassowrd }); // await added---so wait till its finished
       await user.save(); 
      // if (process.env.NODE_ENV !== "test") { await sendEmail(  email, await createConfirmEmailLink(url, user.id, redis)  ); }
      // await createConfirmEmailLink(url, user.id, redis);
