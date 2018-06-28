@@ -1,5 +1,5 @@
-import "reflect-metadata";
+// import "reflect-metadata";
 import {startServer} from "./startServer";
-import "dotenv/config";
+// import "dotenv/config";
 
 startServer();

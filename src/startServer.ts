@@ -5,6 +5,8 @@ import { confirmEmail } from './routes/confirmEmail';
 import { genSchema } from './utils/genSchema';
 import * as session from "express-session";
 import * as connectRedis from "connect-redis";
+import "dotenv/config";
+import "reflect-metadata";
 
 const SESSION_SECRET = "ajslkjalksjdfkl";
 const RedisStore = connectRedis(session);
