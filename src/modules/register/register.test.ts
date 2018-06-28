@@ -1,8 +1,9 @@
 import { request } from "graphql-request";
-import { startServer } from "../../startServer";
+
 import { User } from "../../entity/User";
 import { duplicateEmail, emailNotLongEnough, invalidEmail, passwordNotLongEnough} from "./errorMessages";
 import { createTypeormConn } from "../../utils/createTypeormConn";
+import { Connection } from "typeorm";
 /*
 let getHost = () => "";
 beforeAll(async () => 
@@ -15,11 +16,12 @@ beforeAll(async () =>
 const getHost=process.env.TEST_HOST as string;
 const email="bbbb@bb.com"; const password="bbb"; 
 const mutation = (e: string, p: string) => `
-mutation { register(email: "${e}", password: "${p}") { path message} }`;
+    mutation { register(email: "${e}", password: "${p}") { path message} }`;
 
-beforeAll(async () => {  await createTypeormConn();});
-
-
+let conn: Connection;
+beforeAll(async () => {   conn = await createTypeormConn();    });
+afterAll(async () => {  conn.close();   });
+    
 describe("Register user", async () => 
 { it("check for duplicate emails", async () => // it or test----it can be any of the two
   { // --------------------error handling-----------------------------------

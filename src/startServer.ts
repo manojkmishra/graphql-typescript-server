@@ -22,12 +22,14 @@ export const startServer = async () =>
                                           }
          }) );
                                     
-    const cors = { credentials: true,  origin: "http://localhost:3000" };
+    // const cors = { credentials: true,  origin: "http://localhost:3000" };
+    // const cors = {  credentials: true, origin: process.env.FRONTEND_HOST as string  };
+    const cors = { credentials: true, origin: process.env.NODE_ENV === "test"  ? "*"  : (process.env.FRONTEND_HOST as string)    };
                                     
 
     server.express.get("/confirm/:id",confirmEmail);
     await createTypeormConn();
     const app= await server.start({ cors,port:process.env.NODE_ENV==="test"?0:4000});
-    console.log("Server is running on localhost:4000");
+   // console.log("Server is running on localhost:4000");
     return app;
 };

@@ -2,6 +2,7 @@ import { request } from "graphql-request";
 import { invalidLogin, confirmEmailError } from "./errorMessages";
 import { User } from "../../entity/User";
 import { createTypeormConn } from "../../utils/createTypeormConn";
+import { Connection } from "typeorm";
 
 const email = "manojkm1980@gmail.com";
 const password = "jalksdf";
@@ -9,7 +10,9 @@ const password = "jalksdf";
 const registerMutation = (e: string, p: string) => `mutation { register(email: "${e}", password: "${p}") {  path   message  }}`;
 const loginMutation = (e: string, p: string) => `mutation {  login(email: "${e}", password: "${p}") {    path    message  }}`;
 
-beforeAll(async () => {  await createTypeormConn();});
+let conn: Connection;
+beforeAll(async () => {   conn = await createTypeormConn();    });
+afterAll(async () => {  conn.close();   });
 
 const loginExpectError = async (e: string, p: string, errMsg: string) => 
 {  const response = await request(    process.env.TEST_HOST as string,    loginMutation(e, p)  );

@@ -30,7 +30,7 @@ afterAll(async () => {
 
     const response = await fetch(url);
     const text = await response.text();
-    console.log('/utils/createconfirmemaillinktest--text====',text);
+    // console.log('/utils/createconfirmemaillinktest--text====',text);
     expect(text).toEqual("ok");
     const user = await User.findOne({ where: { id: userId } });
   //  expect((user as User).confirmed).toBeTruthy();

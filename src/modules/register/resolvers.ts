@@ -1,5 +1,5 @@
 // tslint:disable
-import * as bcrypt from "bcryptjs";
+
 import { ResolverMap } from "../../types/graphql-utils";
 import { User } from "../../entity/User";
 // import {User} from './entity/User'; 
@@ -31,8 +31,8 @@ export const resolvers: ResolverMap =
                 }]; // return array of errors from resovlers
       }
              
-      const hashedPassowrd = await bcrypt.hash(password, 10); // this is async---but we are waiting(ie wait till its done--then move ahead)
-      const user= User.create({ id: v4(),email, password:hashedPassowrd }); // await added---so wait till its finished
+      // const hashedPassowrd = await bcrypt.hash(password, 10); // this is async---but we are waiting(ie wait till its done--then move ahead)
+      const user= User.create({ id: v4(),email, password }); // await added---so wait till its finished
       await user.save(); 
      // if (process.env.NODE_ENV !== "test") { await sendEmail(  email, await createConfirmEmailLink(url, user.id, redis)  ); }
      // await createConfirmEmailLink(url, user.id, redis);

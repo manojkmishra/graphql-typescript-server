@@ -9,7 +9,7 @@ export const setup = async () => {
   // console.log('app====',app);
    const { port } = app.address() as AddressInfo;
   // const port = app.address();
-   console.log('port====',port);
+  // console.log('port====',port);
   process.env.TEST_HOST = `http://127.0.0.1:${port}`;
  // process.env.TEST_HOST = `http://127.0.0.1:4000`;
 };
