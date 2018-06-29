@@ -17,6 +17,15 @@ export class TestClient
   async logout() 
    { return rp.post(this.url, {...this.options,  body: {  query: `mutation {  logout  }`  }   }); }
 
+   async forgotPasswordChange(newPassword: string, key: string) 
+   {  return rp.post(this.url, 
+         {  ...this.options,
+            body: { query: `mutation {  forgotPasswordChange(newPassword: "${newPassword}", key: "${key}") 
+                                                { path   message    }   } `
+                  }
+         });
+    }
+
   async me() 
    { return rp.post(this.url, {  ...this.options, body: {  query: `{   me {  id   email  } }`   }    }); }
 
