@@ -8,6 +8,8 @@ import * as connectRedis from "connect-redis";
 import "dotenv/config";
 import "reflect-metadata";
 import { redisSessionPrefix } from "./constants";
+import * as RateLimit from "express-rate-limit";
+import * as RateLimitRedisStore from "rate-limit-redis";
 
 const SESSION_SECRET = "ajslkjalksjdfkl";
 const RedisStore = connectRedis(session);
@@ -17,6 +19,14 @@ export const startServer = async () =>
                                         context: ({ request }) => 
                                         ({ redis, url: request.protocol + "://" + request.get("host"), session: request.session , req: request })
                                      });
+
+    server.express.use(new RateLimit({
+                          store: new RateLimitRedisStore({   client: redis }),
+                          windowMs: 15 * 60 * 1000, // 15 minutes
+                          max: 100, // limit each IP to 100 requests per windowMs
+                          delayMs: 0 // disable delaying - full speed until the max limit is reached
+                                        })
+                        );
 
     server.express.use(session(
         { store: new RedisStore({ client: redis as any , prefix: redisSessionPrefix}),
