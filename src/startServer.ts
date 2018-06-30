@@ -10,6 +10,9 @@ import "reflect-metadata";
 import { redisSessionPrefix } from "./constants";
 import * as RateLimit from "express-rate-limit";
 import * as RateLimitRedisStore from "rate-limit-redis";
+import * as passport from "passport";
+import { Strategy } from "passport-twitter";
+// import { User } from "./entity/User";
 
 const SESSION_SECRET = "ajslkjalksjdfkl";
 const RedisStore = connectRedis(session);
@@ -43,6 +46,54 @@ export const startServer = async () =>
 
     server.express.get("/confirm/:id",confirmEmail);
     await createTypeormConn();
+// -------------------------for twitter oauth------------------------
+passport.use(  new Strategy( {   consumerKey: process.env.TWITTER_CONSUMER_KEY as string,
+                                consumerSecret: process.env.TWITTER_CONSUMER_SECRET as string,
+                                callbackURL: "http://localhost:4000/auth/twitter/callback",
+                                includeEmail: true
+                 
+                             },
+                async (_, __, profile, cb) => 
+                {   console.log('startserver-profile=',profile);
+                console.log('startserver-cb=',cb);
+                  /*  const { id, emails } = profile;
+                    const query = connection.getRepository(User).createQueryBuilder("user").where("user.twitterId = :id", { id });
+                    let email: string | null = null;
+                    if (emails) {    email = emails[0].value;      query.orWhere("user.email = :email", { email });   }
+                    let user = await query.getOne();
+                    // this user needs to be registered
+                    if (!user) 
+                    { user = await User.create({ twitterId: id,  email}).save();
+                    } else if (!user.twitterId) {
+                                                // merge account
+                                                // we found user by email
+                                                user.twitterId = id;
+                                                await user.save();
+                                                } else {
+                                                // we have a twitterId
+                                                // login
+                                                 }
+
+                     return cb(null, { id: user.id });
+                     */
+                }
+    )
+  );
+
+  server.express.use(passport.initialize());
+
+  server.express.get("/auth/twitter", passport.authenticate("twitter"));
+
+  server.express.get(
+    "/auth/twitter/callback",
+    passport.authenticate("twitter", { session: false }),
+    (req, res) => {
+      (req.session as any).userId = (req.user as any).id;
+      // @todo redirect to frontend
+      res.redirect("/");
+    }
+);
+
     const app= await server.start({ cors,port:process.env.NODE_ENV==="test"?0:4000});
    // console.log("Server is running on localhost:4000");
     return app;
