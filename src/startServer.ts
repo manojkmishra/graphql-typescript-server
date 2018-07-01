@@ -12,7 +12,7 @@ import * as RateLimit from "express-rate-limit";
 import * as RateLimitRedisStore from "rate-limit-redis";
 import * as passport from "passport";
 import { Strategy } from "passport-twitter";
-// import { User } from "./entity/User";
+ import { User } from "./entity/User";
 
 const SESSION_SECRET = "ajslkjalksjdfkl";
 const RedisStore = connectRedis(session);
@@ -45,7 +45,8 @@ export const startServer = async () =>
                                     
 
     server.express.get("/confirm/:id",confirmEmail);
-    await createTypeormConn();
+    // createTypeormConn();
+    const connection = await createTypeormConn();
 // -------------------------for twitter oauth------------------------
 passport.use(  new Strategy( {   consumerKey: process.env.TWITTER_CONSUMER_KEY as string,
                                 consumerSecret: process.env.TWITTER_CONSUMER_SECRET as string,
@@ -56,7 +57,7 @@ passport.use(  new Strategy( {   consumerKey: process.env.TWITTER_CONSUMER_KEY a
                 async (_, __, profile, cb) => 
                 {   console.log('startserver-profile=',profile);
                 console.log('startserver-cb=',cb);
-                  /*  const { id, emails } = profile;
+                    const { id, emails } = profile;
                     const query = connection.getRepository(User).createQueryBuilder("user").where("user.twitterId = :id", { id });
                     let email: string | null = null;
                     if (emails) {    email = emails[0].value;      query.orWhere("user.email = :email", { email });   }
@@ -75,7 +76,7 @@ passport.use(  new Strategy( {   consumerKey: process.env.TWITTER_CONSUMER_KEY a
                                                  }
 
                      return cb(null, { id: user.id });
-                     */
+                     
                 }
     )
   );
