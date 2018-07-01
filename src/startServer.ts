@@ -91,7 +91,8 @@ passport.use(  new Strategy( {   consumerKey: process.env.TWITTER_CONSUMER_KEY a
     (req, res) => {
       (req.session as any).userId = (req.user as any).id;
       // @todo redirect to frontend
-      res.redirect("/");
+      // res.redirect("/");
+      res.redirect("http://localhost:3000/some-page/");
     }
 );
 
